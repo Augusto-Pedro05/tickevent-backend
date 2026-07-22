@@ -3,6 +3,7 @@ package com.tickevent.app.application.ports.out;
 import com.tickevent.app.domain.models.User;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserRepository {
 
@@ -22,4 +23,10 @@ public interface UserRepository {
      * Retorna um Optional para evitar NullPointerException caso o e-mail não exista.
      */
     Optional<User> findByEmail(String email);
+
+    /**
+     * Busca um usuário pelo uuid.
+     * Retorna um Optional para evitar NullPointerException caso o e-mail não exista.
+     */
+    Optional<User> findById(UUID id);
 }

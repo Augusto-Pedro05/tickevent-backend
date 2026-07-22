@@ -9,6 +9,7 @@ import com.tickevent.app.domain.models.User;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.tickevent.app.domain.models.User.Role.ADMIN;
 import static com.tickevent.app.domain.models.User.Role.USER;
 
 public class UserService {
@@ -24,28 +25,42 @@ public class UserService {
      * Registra um novo cliente final (Ticket Holder) no sistema.
      */
     public User registerClient(UserRegistrationDTO dto){
-        if(userRepository.existsByEmail(dto.getEmail())) throw new RuntimeException("Email already exists");
-        String hashedPassword = passwordHasher.hash(dto.getPassword());
+        if(userRepository.existsByEmail(dto.email())) throw new RuntimeException("Email already exists");
+        String hashedPassword = passwordHasher.hash(dto.password());
 
         User newUser = new User(
                 UUID.randomUUID(),
-                dto.getName(),
-                dto.getEmail(),
+                dto.name(),
+                dto.email(),
                 hashedPassword,
-                dto.getPhoneNumber(),
+                dto.phoneNumber(),
                 LocalDateTime.now(),
-                dto.getDocument(),
-                dto.getBirthDate(),
-                USER
+                dto.document(),
+                dto.birthDate()
         );
         return userRepository.save(newUser);
     }
 
 
-    public void registerAdmin(AdminRegistrationDTO dto){
+    public User registerAdmin(AdminRegistrationDTO dto){
+        if(userRepository.existsByEmail(dto.email())) throw new RuntimeException("Email already exists");
+        String hashedPassword = passwordHasher.hash(dto.password());
 
+        User newAdmin = new User(
+                UUID.randomUUID(),
+                dto.name(),
+                dto.email(),
+                hashedPassword,
+                dto.phoneNumber(),
+                LocalDateTime.now(),
+                dto.document(),
+                dto.commercialName(),
+                dto.bankAccountDetails(),
+                false
+        );
+        return userRepository.save(newAdmin);
     }
-    public void findUserByEmail(String email){
-
+    public User findUserByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("Unregistered email"));
     }
 }

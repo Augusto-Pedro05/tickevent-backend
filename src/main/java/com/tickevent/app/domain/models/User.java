@@ -2,9 +2,7 @@ package com.tickevent.app.domain.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
-
 
 public class User {
 
@@ -26,13 +24,12 @@ public class User {
     private String commercialName;
     private String bankAccountDetails;
     private Boolean isApproved;
-    private List<Event> managedEvents;
 
     public User() {
     }
 
     public User(UUID id, String name, String email, String password, String phoneNumber,
-                LocalDateTime createdAt, String document, LocalDate birthDate, Role role) {
+                LocalDateTime createdAt, String document, LocalDate birthDate) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -41,7 +38,7 @@ public class User {
         this.createdAt = createdAt;
         this.document = document;
         this.birthDate = birthDate;
-        this.role = role;
+        this.role = Role.ADMIN;
         this.commercialName = null;
         this.bankAccountDetails = null;
         this.isApproved = null;
@@ -49,7 +46,7 @@ public class User {
 
     public User(UUID id, String name, String email, String password, String phoneNumber,
                 LocalDateTime createdAt, String document, String commercialName,
-                String bankAccountDetails, Boolean isApproved, Role role) {
+                String bankAccountDetails, Boolean isApproved) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -60,7 +57,15 @@ public class User {
         this.commercialName = commercialName;
         this.bankAccountDetails = bankAccountDetails;
         this.isApproved = isApproved;
-        this.role = role;
+        this.role = Role.USER;
         this.birthDate = null;
     }
+
+    public String getPassword() { return this.password;}
+
+    public Role getRole() {
+        return this.role;
+    }
+
+    public UUID getId(){ return this.id; }
 }

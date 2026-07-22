@@ -1,4 +1,7 @@
 package com.tickevent.app.domain.dtos;
 
-public record LoginDTO() {
+public record LoginDTO(
+        String email,
+        String password
+) {
 }
