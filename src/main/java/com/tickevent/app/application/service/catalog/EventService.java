@@ -7,20 +7,16 @@ import com.tickevent.app.domain.dtos.EventUpdateDTO;
 import com.tickevent.app.domain.models.Event;
 import com.tickevent.app.domain.models.Location;
 import com.tickevent.app.domain.models.User;
+import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
 
-import static com.tickevent.app.application.service.utils.PatchUtils.updateIfPresent;
-import static com.tickevent.app.application.service.utils.PatchUtils.isLocationIncomplete;
+import static com.tickevent.app.application.service.utils.PatchUtils.*;
 
+@RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
-
-    public EventService(EventRepository eventRepository, UserRepository userRepository) {
-        this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
-    }
 
     public Event createEvent(UUID requesterId, EventCreationDTO dto) {
         User requester = userRepository.findById(requesterId)
@@ -56,11 +52,7 @@ public class EventService {
         User requester = userRepository.findById(requesterId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if(requester.getRole() != User.Role.ADMIN){
-            throw new RuntimeException("Access denied: only users with admin role perform this action");
-        }else if(!event.getCreatorId().equals(requesterId)){
-            throw new RuntimeException("Access denied: the requester is not owner");
-        }
+        verifyEventOwnership(requester, event);
         event.deactivate();
 
         return eventRepository.save(event);
@@ -73,11 +65,7 @@ public class EventService {
         User requester = userRepository.findById(requesterId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if(requester.getRole() != User.Role.ADMIN){
-            throw new RuntimeException("Access denied: only users with admin role perform this action");
-        } else if(!event.getCreatorId().equals(requesterId)){
-            throw new RuntimeException("Access denied: the requester is not owner");
-        }
+        verifyEventOwnership(requester, event);
 
         updateIfPresent(dto.title(), event::setTitle);
         updateIfPresent(dto.description(), event::setDescription);
@@ -120,11 +108,7 @@ public class EventService {
         User requester = userRepository.findById(requesterId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if(requester.getRole() != User.Role.ADMIN){
-            throw new RuntimeException("Access denied: only users with admin role perform this action");
-        } else if(!event.getCreatorId().equals(requesterId)){
-            throw new RuntimeException("Access denied: the requester is not owner");
-        }
+        verifyEventOwnership(requester, event);
 
         event.publish();
         return eventRepository.save(event);

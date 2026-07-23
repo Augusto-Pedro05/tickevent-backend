@@ -1,9 +1,15 @@
 package com.tickevent.app.domain.models;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
+@Setter
 public class User {
 
     public enum Role {
@@ -12,6 +18,7 @@ public class User {
         USER
     }
 
+    @Setter(AccessLevel.NONE)
     private UUID id;
     private String name;
     private String email;
@@ -38,7 +45,7 @@ public class User {
         this.createdAt = createdAt;
         this.document = document;
         this.birthDate = birthDate;
-        this.role = Role.ADMIN;
+        this.role = Role.USER;
         this.commercialName = null;
         this.bankAccountDetails = null;
         this.isApproved = null;
@@ -57,15 +64,7 @@ public class User {
         this.commercialName = commercialName;
         this.bankAccountDetails = bankAccountDetails;
         this.isApproved = isApproved;
-        this.role = Role.USER;
+        this.role = Role.ADMIN;
         this.birthDate = null;
     }
-
-    public String getPassword() { return this.password;}
-
-    public Role getRole() {
-        return this.role;
-    }
-
-    public UUID getId(){ return this.id; }
 }

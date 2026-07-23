@@ -9,12 +9,17 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+@Getter
+@Setter
 public class Event {
 
     public enum Status {
@@ -24,7 +29,7 @@ public class Event {
         FINISHED,
         SUSPENDED
     }
-
+    @Setter(AccessLevel.NONE)
     @NotNull(message = "Event ID is required.")
     private UUID id;
 
@@ -57,6 +62,7 @@ public class Event {
     @NotNull(message = "End date is required.")
     private LocalDateTime endDateTime;
 
+    @Setter(AccessLevel.NONE)
     @NotNull(message = "Event status is required.")
     private Status status;
 
@@ -83,30 +89,8 @@ public class Event {
         this.status = Status.DRAFT;
     }
 
-    public UUID getCreatorId() {
-        return this.creator.getId();
-    }
-
-    public Location getLocation() { return this.location; }
-
     public void deactivate() {
         this.status = Status.CANCELED;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setBannerUrl(String bannerUrl) {
-        this.bannerUrl = bannerUrl;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public void setMaxCapacity(Integer maxCapacity) {
@@ -121,19 +105,11 @@ public class Event {
         }
     }
 
-    public void setStartDateTime(LocalDateTime startDateTime) {
-        this.startDateTime = startDateTime;
-    }
-
     public void setEndDateTime(LocalDateTime endDateTime) {
         if (this.startDateTime != null && endDateTime.isBefore(this.startDateTime)) {
             throw new RuntimeException("End date cannot be earlier than start date.");
         }
         this.endDateTime = endDateTime;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
     }
 
     public void publish() {
@@ -142,10 +118,8 @@ public class Event {
     }
 
     private void validateForPublishing() {
-
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             Validator validator = factory.getValidator();
-
             Set<ConstraintViolation<Event>> violations = validator.validate(this, PublishingGroup.class);
 
             if (!violations.isEmpty()) {

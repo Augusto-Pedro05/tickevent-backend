@@ -5,21 +5,15 @@ import com.tickevent.app.application.ports.out.UserRepository;
 import com.tickevent.app.domain.dtos.AdminRegistrationDTO;
 import com.tickevent.app.domain.dtos.UserRegistrationDTO;
 import com.tickevent.app.domain.models.User;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static com.tickevent.app.domain.models.User.Role.ADMIN;
-import static com.tickevent.app.domain.models.User.Role.USER;
-
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordHasher passwordHasher;
-
-    public UserService(UserRepository userRepository, PasswordHasher passwordHasher) {
-        this.userRepository = userRepository;
-        this.passwordHasher = passwordHasher;
-    }
 
     /**
      * Registra um novo cliente final (Ticket Holder) no sistema.
