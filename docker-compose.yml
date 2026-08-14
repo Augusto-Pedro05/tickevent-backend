@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------
+  # 1. SERVIÇO DO BANCO DE DADOS (POSTGRESQL)
+  # ----------------------------------------
+  db:
+    image: postgres:16
+    container_name: tickevent-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: tickadmin
+      POSTGRES_PASSWORD: tickpass
+      POSTGRES_DB: tickevent_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Garante que os dados não sejam perdidos se o container reiniciar
+
+  # ----------------------------------------
+  # 2. SERVIÇO DA API (SPRING BOOT)
+  # ----------------------------------------
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tickevent-api
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/tickevent_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+volumes:
+  postgres_data:
