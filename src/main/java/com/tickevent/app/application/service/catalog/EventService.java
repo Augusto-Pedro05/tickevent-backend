@@ -25,21 +25,11 @@ public class EventService {
             throw new RuntimeException("Unauthorized access");
         }
 
-        Location eventLocation = new Location(
-                dto.location().venueName(),
-                dto.location().street(),
-                dto.location().number(),
-                dto.location().city(),
-                dto.location().state()
-        );
-
         Event newEvent = new Event(
                 UUID.randomUUID(),
                 dto.title(),
-                dto.description(),
                 dto.startDate(),
                 dto.endDate(),
-                eventLocation,
                 requester
         );
 

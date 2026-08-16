@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface TicketCategoryRepository {
-    TicketCategory save(TicketCategory newCategory);
+    TicketCategory save(UUID eventId, TicketCategory newCategory);
 
     Optional<TicketCategory> findById(UUID categoryId);
 

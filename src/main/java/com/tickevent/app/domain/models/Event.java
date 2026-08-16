@@ -7,13 +7,14 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -29,32 +30,15 @@ public class Event {
         FINISHED,
         SUSPENDED
     }
+
+    // --- GRUPO PADRÃO (Obrigatórios na criação do Rascunho) ---
+
     @Setter(AccessLevel.NONE)
     @NotNull(message = "Event ID is required.")
     private UUID id;
 
     @NotBlank(message = "Title is required.")
     private String title;
-
-    @NotBlank(message = "Description is required.", groups = PublishingGroup.class)
-    private String description;
-
-    @NotBlank(message = "Banner URL is required.", groups = PublishingGroup.class)
-    private String bannerUrl;
-
-    @NotBlank(message = "Category is required.", groups = PublishingGroup.class)
-    private String category;
-
-    @NotNull(message = "Max capacity is required.", groups = PublishingGroup.class)
-    @Min(value = 1, message = "Max capacity must be greater than zero.", groups = PublishingGroup.class)
-    private Integer maxCapacity;
-
-    @NotNull(message = "Location is required.")
-    private Location location;
-
-    @NotNull(message = "Max tickets per user is required.", groups = PublishingGroup.class)
-    @Min(value = 1, message = "Max tickets per user must be greater than zero.", groups = PublishingGroup.class)
-    private Integer maxTicketsPerUser;
 
     @NotNull(message = "Start date is required.")
     private LocalDateTime startDateTime;
@@ -69,24 +53,45 @@ public class Event {
     @NotNull(message = "Event creator is required.")
     private User creator;
 
+    // --- GRUPO DE PUBLICAÇÃO (Obrigatórios apenas para publicar) ---
+
+    @NotBlank(message = "Description is required.", groups = PublishingGroup.class)
+    private String description;
+
+    @NotBlank(message = "Banner URL is required.", groups = PublishingGroup.class)
+    private String bannerUrl;
+
+    @NotBlank(message = "Category is required.", groups = PublishingGroup.class)
+    private String category;
+
+    @NotNull(message = "Location is required.", groups = PublishingGroup.class)
+    private Location location;
+
+    @NotNull(message = "Max capacity is required.", groups = PublishingGroup.class)
+    @Min(value = 1, message = "Max capacity must be greater than zero.", groups = PublishingGroup.class)
+    private Integer maxCapacity;
+
+    @NotNull(message = "Max tickets per user is required.", groups = PublishingGroup.class)
+    @Min(value = 1, message = "Max tickets per user must be greater than zero.", groups = PublishingGroup.class)
+    private Integer maxTicketsPerUser;
+
     @NotEmpty(message = "At least one ticket category is required.", groups = PublishingGroup.class)
     private List<TicketCategory> ticketCategories;
 
+    // --- CONSTRUTOR ENXUTO (Apenas o essencial) ---
+
     public Event(UUID id,
                  String title,
-                 String description,
                  LocalDateTime startDateTime,
                  LocalDateTime endDateTime,
-                 Location location,
                  User creator) {
         this.id = id;
         this.title = title;
-        this.description = description;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
-        this.location = location;
         this.creator = creator;
         this.status = Status.DRAFT;
+        this.ticketCategories = new ArrayList<>();
     }
 
     public void deactivate() {
@@ -94,13 +99,13 @@ public class Event {
     }
 
     public void setMaxCapacity(Integer maxCapacity) {
-        if (maxCapacity > 0) {
+        if (maxCapacity != null && maxCapacity > 0) {
             this.maxCapacity = maxCapacity;
         }
     }
 
     public void setMaxTicketsPerUser(Integer maxTicketsPerUser) {
-        if (maxTicketsPerUser > 0) {
+        if (maxTicketsPerUser != null && maxTicketsPerUser > 0) {
             this.maxTicketsPerUser = maxTicketsPerUser;
         }
     }

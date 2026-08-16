@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 
 import java.util.TimeZone;
-
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+//exclude = {DataSourceAutoConfiguration.class}
+@SpringBootApplication()
 public class AppApplication {
 
 	public static void main(String[] args) {

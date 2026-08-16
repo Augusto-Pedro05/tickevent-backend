@@ -1,4 +1,4 @@
-package com.tickevent.app.adapters.outbound.doors;
+package com.tickevent.app.adapters.outbound.ports;
 
 import com.tickevent.app.adapters.outbound.repositories.SpringDataEventRepository;
 import com.tickevent.app.application.ports.out.EventRepository;
@@ -6,10 +6,12 @@ import com.tickevent.app.domain.models.Event;
 import com.tickevent.app.utils.mappers.EventMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 @Component
 @RequiredArgsConstructor
 public class EventRepositoryAdapter implements EventRepository {

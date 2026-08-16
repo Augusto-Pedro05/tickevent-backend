@@ -36,7 +36,7 @@ public class TicketCategoryService {
                 dto.description()
         );
 
-        return categoryRepository.save(newCategory);
+        return categoryRepository.save(event.getId(), newCategory);
     }
 
     public TicketCategory updateCategory(UUID eventId, UUID categoryId, UUID requesterId, TicketCategoryUpdateDTO dto) {
@@ -53,7 +53,7 @@ public class TicketCategoryService {
         updateIfPresent(dto.name(), category::setName);
         updateIfPresent(dto.description(), category::setDescription);
 
-        return categoryRepository.save(category);
+        return categoryRepository.save(event.getId(),category);
     }
 
     public void deleteCategory(UUID eventId, UUID categoryId, UUID requesterId) {
