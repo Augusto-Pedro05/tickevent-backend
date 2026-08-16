@@ -12,12 +12,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Classe de testes unitários para a gestão de identidade e usuários (UserService).
+ * Responsável por garantir que o fluxo de registro e autenticação cumpra os requisitos
+ * de segurança.
+ */
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
     @Mock
@@ -30,17 +33,13 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    @DisplayName("Deve registrar cliente com sucesso e aplicar hash na senha")
+    @DisplayName("Should successfully register a customer and hash the password")
     void shouldRegisterClientSuccessfully() {
         // Arrange
-        UserRegistrationDTO dto = new UserRegistrationDTO(
-                "João", "joao@email.com", "senha123", "11999999999", "12345678900", LocalDate.of(2000, 1, 1)
-        );
+        UserRegistrationDTO dto = mock(UserRegistrationDTO.class);
 
-        when(userRepository.existsByEmail(dto.email())).thenReturn(false); //[cite: 5]
-        when(passwordHasher.hash(dto.password())).thenReturn("hash_seguro"); //[cite: 5]
-
-        // Simula o retorno do banco (pode ser um mock genérico do usuário)
+        when(userRepository.existsByEmail(dto.email())).thenReturn(false);
+        when(passwordHasher.hash(dto.password())).thenReturn("hash_seguro");
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
@@ -53,17 +52,16 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Deve estourar exceção se o email já estiver em uso")
+    @DisplayName("An exception should be thrown if the email is already in use.")
     void shouldThrowExceptionWhenEmailExists() {
         // Arrange
-        UserRegistrationDTO dto = new UserRegistrationDTO(
-                "João", "joao@email.com", "senha123", "11", "123", LocalDate.now()
-        );
-        when(userRepository.existsByEmail(dto.email())).thenReturn(true); //[cite: 5]
+        UserRegistrationDTO dto = mock(UserRegistrationDTO.class);
+
+        when(userRepository.existsByEmail(dto.email())).thenReturn(true);
 
         // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.registerClient(dto));
-        assertEquals("Email already exists", exception.getMessage()); //[cite: 5]
+        assertEquals("Email already exists", exception.getMessage());
         verify(userRepository, never()).save(any());
     }
 }

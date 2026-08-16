@@ -24,9 +24,9 @@ public class TicketCategoryService {
 
     public TicketCategory createCategory(UUID eventId, UUID requesterId, TicketCategoryCreationDTO dto) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("Event not found."));
+                .orElseThrow(() -> new RuntimeException("Event not found"));
         User requester = userRepository.findById(requesterId)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         verifyEventOwnership(requester, event);
 
@@ -41,14 +41,14 @@ public class TicketCategoryService {
 
     public TicketCategory updateCategory(UUID eventId, UUID categoryId, UUID requesterId, TicketCategoryUpdateDTO dto) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("Event not found."));
+                .orElseThrow(() -> new RuntimeException("Event not found"));
         User requester = userRepository.findById(requesterId)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         verifyEventOwnership(requester, event);
 
         TicketCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Ticket category not found."));
+                .orElseThrow(() -> new RuntimeException("Ticket category not found"));
 
         updateIfPresent(dto.name(), category::setName);
         updateIfPresent(dto.description(), category::setDescription);
@@ -58,20 +58,20 @@ public class TicketCategoryService {
 
     public void deleteCategory(UUID eventId, UUID categoryId, UUID requesterId) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("Event not found."));
+                .orElseThrow(() -> new RuntimeException("Event not found"));
         User requester = userRepository.findById(requesterId)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         verifyEventOwnership(requester, event);
 
         TicketCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Ticket category not found."));
+                .orElseThrow(() -> new RuntimeException("Ticket category not found"));
 
         boolean hasSoldTickets = category.getBatches().stream()
                 .anyMatch(batch -> batch.getAvailableQuantity() < batch.getTotalLimit());
 
         if (hasSoldTickets) {
-            throw new RuntimeException("Cannot delete a ticket category that already has sold tickets in one of its batches.");
+            throw new RuntimeException("Cannot delete a ticket category that already has sold tickets in one of its batches");
         }
 
         categoryRepository.delete(category);
