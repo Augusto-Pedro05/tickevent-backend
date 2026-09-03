@@ -1,17 +1,15 @@
 package com.tickevent.app.adapters.outbound.security;
 
 import com.tickevent.app.application.ports.out.PasswordHasher;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class BCryptPasswordHasherAdapter implements PasswordHasher {
-    private final PasswordEncoder passwordEncoder;
 
-    public BCryptPasswordHasherAdapter() {
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public String hash(String rawPassword) {

@@ -4,6 +4,8 @@ import com.tickevent.app.application.ports.out.PasswordHasher;
 import com.tickevent.app.application.ports.out.UserRepository;
 import com.tickevent.app.domain.dtos.controller.AdminRegistrationDTO;
 import com.tickevent.app.domain.dtos.controller.UserRegistrationDTO;
+import com.tickevent.app.domain.exceptions.EmailAlreadyExistsException;
+import com.tickevent.app.domain.exceptions.InvalidCredentialsException;
 import com.tickevent.app.domain.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ public class UserService {
      * Registra um novo cliente final (Ticket Holder) no sistema.
      */
     public User registerClient(UserRegistrationDTO dto){
-        if(userRepository.existsByEmail(dto.email())) throw new RuntimeException("Email already exists");
+        if(userRepository.existsByEmail(dto.email())) throw new EmailAlreadyExistsException();
         String hashedPassword = passwordHasher.hash(dto.password());
 
         User newUser = new User(
@@ -39,7 +41,7 @@ public class UserService {
 
 
     public User registerAdmin(AdminRegistrationDTO dto){
-        if(userRepository.existsByEmail(dto.email())) throw new RuntimeException("Email already exists");
+        if(userRepository.existsByEmail(dto.email())) throw new EmailAlreadyExistsException();
         String hashedPassword = passwordHasher.hash(dto.password());
 
         User newAdmin = new User(
@@ -56,7 +58,8 @@ public class UserService {
         );
         return userRepository.save(newAdmin);
     }
+
     public User findUserByEmail(String email){
-        return userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("Unregistered email"));
+        return userRepository.findByEmail(email).orElseThrow(InvalidCredentialsException::new);
     }
 }

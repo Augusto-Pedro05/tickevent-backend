@@ -1,6 +1,11 @@
 package com.tickevent.app.adapters.inbound.middlewares;
 
 import com.tickevent.app.domain.dtos.middleware.ErrorResponseDTO;
+import com.tickevent.app.domain.exceptions.EmailAlreadyExistsException;
+import com.tickevent.app.domain.exceptions.InvalidCredentialsException;
+import com.tickevent.app.domain.exceptions.InvalidTokenException;
+import com.tickevent.app.domain.exceptions.ResourceNotFoundException;
+import com.tickevent.app.domain.exceptions.UnauthorizedAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,24 +15,28 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponseDTO> handleRuntimeException(RuntimeException ex) {
-        String message = ex.getMessage();
-        HttpStatus status = HttpStatus.BAD_REQUEST;
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDTO> handleEmailAlreadyExists(EmailAlreadyExistsException ex) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        return ResponseEntity.status(status).body(new ErrorResponseDTO(ex.getMessage(), status.value()));
+    }
 
-        if (message != null) {
-            if (message.contains("Email already exists")) {
-                status = HttpStatus.CONFLICT;
-            } else if (message.contains("Invalid credentials") || message.contains("Unregistered email")) {
-                status = HttpStatus.UNAUTHORIZED;
-            } else if (message.contains("Unauthorized access")) {
-                status = HttpStatus.FORBIDDEN;
-            } else if (message.contains("not found") || message.contains("Not found")) {
-                status = HttpStatus.NOT_FOUND;
-            }
-        }
+    @ExceptionHandler({InvalidCredentialsException.class, InvalidTokenException.class})
+    public ResponseEntity<ErrorResponseDTO> handleUnauthorized(RuntimeException ex) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        return ResponseEntity.status(status).body(new ErrorResponseDTO(ex.getMessage(), status.value()));
+    }
 
-        return ResponseEntity.status(status).body(new ErrorResponseDTO(message, status.value()));
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<ErrorResponseDTO> handleForbidden(UnauthorizedAccessException ex) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        return ResponseEntity.status(status).body(new ErrorResponseDTO(ex.getMessage(), status.value()));
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleNotFound(ResourceNotFoundException ex) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(new ErrorResponseDTO(ex.getMessage(), status.value()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
