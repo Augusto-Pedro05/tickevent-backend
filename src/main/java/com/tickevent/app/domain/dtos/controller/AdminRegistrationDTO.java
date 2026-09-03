@@ -1,6 +1,4 @@
-package com.tickevent.app.domain.dtos;
-
-import java.time.LocalDate;
+package com.tickevent.app.domain.dtos.controller;
 
 public record AdminRegistrationDTO(
         String name,

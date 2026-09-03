@@ -1,9 +1,6 @@
-package com.tickevent.app.domain.dtos;
-
-import com.tickevent.app.domain.models.TicketCategory;
+package com.tickevent.app.domain.dtos.controller;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record EventCreationDTO(
         String title,

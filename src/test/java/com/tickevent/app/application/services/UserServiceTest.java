@@ -3,7 +3,7 @@ package com.tickevent.app.application.services;
 import com.tickevent.app.application.ports.out.PasswordHasher;
 import com.tickevent.app.application.ports.out.UserRepository;
 import com.tickevent.app.application.service.identity.UserService;
-import com.tickevent.app.domain.dtos.UserRegistrationDTO;
+import com.tickevent.app.domain.dtos.controller.UserRegistrationDTO;
 import com.tickevent.app.domain.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

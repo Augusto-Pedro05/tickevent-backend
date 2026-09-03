@@ -1,6 +1,6 @@
 package com.tickevent.app.application.service.utils;
 
-import com.tickevent.app.domain.dtos.LocationDTO;
+import com.tickevent.app.domain.dtos.controller.LocationDTO;
 import com.tickevent.app.domain.models.Event;
 import com.tickevent.app.domain.models.User;
 

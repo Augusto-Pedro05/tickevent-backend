@@ -2,17 +2,19 @@ package com.tickevent.app.application.service.catalog;
 
 import com.tickevent.app.application.ports.out.EventRepository;
 import com.tickevent.app.application.ports.out.UserRepository;
-import com.tickevent.app.domain.dtos.EventCreationDTO;
-import com.tickevent.app.domain.dtos.EventUpdateDTO;
+import com.tickevent.app.domain.dtos.controller.EventCreationDTO;
+import com.tickevent.app.domain.dtos.controller.EventUpdateDTO;
 import com.tickevent.app.domain.models.Event;
 import com.tickevent.app.domain.models.Location;
 import com.tickevent.app.domain.models.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 import static com.tickevent.app.application.service.utils.PatchUtils.*;
 
+@Service
 @RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;

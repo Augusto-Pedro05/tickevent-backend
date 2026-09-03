@@ -2,14 +2,16 @@ package com.tickevent.app.application.service.identity;
 
 import com.tickevent.app.application.ports.out.PasswordHasher;
 import com.tickevent.app.application.ports.out.UserRepository;
-import com.tickevent.app.domain.dtos.AdminRegistrationDTO;
-import com.tickevent.app.domain.dtos.UserRegistrationDTO;
+import com.tickevent.app.domain.dtos.controller.AdminRegistrationDTO;
+import com.tickevent.app.domain.dtos.controller.UserRegistrationDTO;
 import com.tickevent.app.domain.models.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;

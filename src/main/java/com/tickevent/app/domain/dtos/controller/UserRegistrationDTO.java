@@ -1,4 +1,4 @@
-package com.tickevent.app.domain.dtos;
+package com.tickevent.app.domain.dtos.controller;
 
 import java.time.LocalDate;
 

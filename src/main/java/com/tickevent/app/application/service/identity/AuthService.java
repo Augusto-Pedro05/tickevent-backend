@@ -2,10 +2,12 @@ package com.tickevent.app.application.service.identity;
 
 import com.tickevent.app.application.ports.out.PasswordHasher;
 import com.tickevent.app.application.ports.out.TokenProvider;
-import com.tickevent.app.domain.dtos.LoginDTO;
+import com.tickevent.app.domain.dtos.controller.LoginDTO;
 import com.tickevent.app.domain.models.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class AuthService {
 

@@ -3,18 +3,20 @@ package com.tickevent.app.application.service.catalog;
 import com.tickevent.app.application.ports.out.EventRepository;
 import com.tickevent.app.application.ports.out.TicketCategoryRepository;
 import com.tickevent.app.application.ports.out.UserRepository;
-import com.tickevent.app.domain.dtos.TicketCategoryCreationDTO;
-import com.tickevent.app.domain.dtos.TicketCategoryUpdateDTO;
+import com.tickevent.app.domain.dtos.controller.TicketCategoryCreationDTO;
+import com.tickevent.app.domain.dtos.controller.TicketCategoryUpdateDTO;
 import com.tickevent.app.domain.models.Event;
 import com.tickevent.app.domain.models.TicketCategory;
 import com.tickevent.app.domain.models.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 import static com.tickevent.app.application.service.utils.PatchUtils.updateIfPresent;
 import static com.tickevent.app.application.service.utils.PatchUtils.verifyEventOwnership;
 
+@Service
 @RequiredArgsConstructor
 public class TicketCategoryService {
 
